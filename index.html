@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARERUYA — Store Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #EDE8DF;
+  --bg2:   #E2DBD0;
+  --ink:   #1A1714;
+  --ink2:  #4A4540;
+  --ink3:  #8A8480;
+  --gold:  #B07E28;
+  --gold-l:rgba(176,126,40,0.14);
+  --gold-b:rgba(176,126,40,0.28);
+  --white: #FAF7F2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--ink); font-family:'Noto Sans JP',sans-serif; }
+
+/* ─── PROGRESS BAR ─── */
+#prog { position:fixed; top:0; left:0; height:3px; background:var(--gold); z-index:300; width:0; transition:width .1s; }
+
+/* ─── NAV ─── */
+#top-nav {
+  position:fixed; top:0; left:0; right:0;
+  padding:0 48px; height:52px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(237,232,223,.92); backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(26,23,20,.06);
+  z-index:200;
+}
+.nav-brand {
+  font-family:'Oswald',sans-serif; font-weight:700;
+  font-size:16px; letter-spacing:.12em; color:var(--ink);
+}
+.nav-links { display:flex; gap:28px; }
+.nav-links a {
+  font-size:10px; font-weight:400; letter-spacing:.3em; color:var(--ink3);
+  text-decoration:none; text-transform:uppercase;
+  transition:color .2s;
+}
+.nav-links a:hover { color:var(--gold); }
+.conf-badge {
+  font-size:9px; letter-spacing:.28em; color:var(--gold);
+  text-transform:uppercase; opacity:.7;
+}
+
+/* ─── SECTION BASE ─── */
+section { width:100%; position:relative; }
+
+/* ─── S01 COVER ─── */
+.cover {
+  height:100vh; min-height:600px;
+  position:relative; display:flex; align-items:flex-end;
+  overflow:hidden;
+}
+.cover-photo {
+  position:absolute; inset:0;
+  background:var(--bg2);
+}
+.cover-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.cover-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(20,17,14,.85) 0%, rgba(20,17,14,.4) 55%, rgba(20,17,14,.15) 100%);
+}
+.cover-text {
+  position:relative; z-index:2;
+  padding:80px;
+  color:var(--white);
+}
+.cover-eyebrow {
+  font-size:10px; letter-spacing:.4em; color:rgba(250,247,242,.6);
+  text-transform:uppercase; margin-bottom:20px;
+}
+.cover-h {
+  font-family:'Oswald',sans-serif; font-weight:700;
+  font-size:clamp(72px,12vw,156px);
+  line-height:.88; color:var(--white);
+}
+.cover-sub {
+  font-family:'Noto Sans JP',sans-serif; font-weight:700;
+  font-size:clamp(20px,3vw,36px); color:rgba(250,247,242,.88);
+  margin-top:16px; letter-spacing:.04em;
+}
+.cover-rule { width:40px; height:2px; background:var(--gold); margin:24px 0; }
+.cover-body {
+  font-size:15px; line-height:1.85; color:rgba(250,247,242,.6);
+  max-width:400px;
+}
+.scroll-hint {
+  position:absolute; bottom:36px; right:60px; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  font-size:9px; letter-spacing:.3em; color:rgba(250,247,242,.4);
+  text-transform:uppercase;
+}
+.scroll-hint::after {
+  content:''; width:1px; height:40px; background:rgba(250,247,242,.3);
+}
+
+/* ─── COMMON SECTION LAYOUT ─── */
+.sec-pad { padding:96px 80px; }
+.sec-pad-dark { padding:96px 80px; background:#1A1714; color:var(--white); }
+.sec-pad-white { padding:96px 80px; background:var(--white); }
+
+.label {
+  font-size:10px; letter-spacing:.4em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:20px;
+  display:flex; align-items:center; gap:8px;
+}
+.label::after { content:''; flex:1; max-width:40px; height:1px; background:var(--gold); }
+.label-center { justify-content:center; }
+.label-center::before { content:''; flex:1; max-width:40px; height:1px; background:var(--gold); }
+.label-center::after { content:''; flex:1; max-width:40px; height:1px; background:var(--gold); }
+
+.h1 {
+  font-family:'Noto Sans JP',sans-serif; font-weight:700;
+  font-size:clamp(36px,4.5vw,64px);
+  line-height:1.2; letter-spacing:.01em; color:var(--ink);
+  margin-bottom:32px;
+}
+.h1-white { color:var(--white); }
+.h2 {
+  font-family:'Noto Sans JP',sans-serif; font-weight:700;
+  font-size:clamp(28px,3vw,44px);
+  line-height:1.25; color:var(--ink); margin-bottom:24px;
+}
+.body {
+  font-weight:300; font-size:16px; line-height:1.95; color:var(--ink2);
+  letter-spacing:.02em;
+}
+.body-sm {
+  font-weight:300; font-size:13px; line-height:1.9; color:var(--ink3);
+  letter-spacing:.02em;
+}
+
+/* ─── LIST ─── */
+.list { list-style:none; max-width:680px; }
+.list li {
+  font-weight:300; font-size:16px; line-height:1;
+  padding:18px 0 18px 28px; position:relative; color:var(--ink2);
+  border-bottom:1px solid rgba(26,23,20,.08);
+}
+.list li:first-child { border-top:1px solid rgba(26,23,20,.08); }
+.list li::before { content:'—'; position:absolute; left:0; color:var(--gold); }
+.list li strong { color:var(--ink); font-weight:700; }
+
+/* ─── SPLIT ─── */
+.split { display:flex; min-height:560px; }
+.split-photo { width:50%; position:relative; overflow:hidden; background:var(--bg2); flex-shrink:0; }
+.split-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.split-body { flex:1; padding:72px 80px; background:var(--white); display:flex; flex-direction:column; justify-content:center; }
+.split-reverse .split-photo { order:2; }
+.split-reverse .split-body { order:1; }
+
+.data-item { padding:20px 0; border-bottom:1px solid rgba(26,23,20,.1); }
+.data-item:last-child { border-bottom:none; }
+.data-label { font-size:9px; letter-spacing:.4em; color:var(--gold); text-transform:uppercase; margin-bottom:8px; font-weight:400; }
+.data-value { font-weight:700; font-size:22px; line-height:1.2; color:var(--ink); letter-spacing:.01em; }
+
+/* ─── CONCEPT DARK SECTION ─── */
+.concept-quote {
+  font-family:'Noto Serif JP',serif; font-weight:400;
+  font-size:clamp(22px,3vw,38px); line-height:1.85;
+  color:rgba(250,247,242,.9); letter-spacing:.06em;
+  max-width:760px; margin-bottom:36px;
+}
+.concept-word {
+  font-family:'Noto Sans JP',sans-serif; font-weight:700;
+  font-size:clamp(44px,6vw,80px); color:var(--gold);
+  line-height:1; letter-spacing:.02em;
+}
+.concept-body {
+  font-size:16px; color:rgba(250,247,242,.6); line-height:2;
+  max-width:520px; letter-spacing:.04em; margin-top:28px;
+  font-weight:300;
+}
+
+/* ─── IMG GRID ─── */
+.img-grid {
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr;
+  grid-template-rows:220px 220px;
+  gap:4px; width:100%; margin-top:24px;
+}
+.img-ph {
+  background:rgba(26,23,20,.05); border:1px dashed var(--gold-b);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; color:var(--ink3); font-size:11px; letter-spacing:.1em;
+}
+.img-ph svg { opacity:.3; }
+.img-grid .img-ph:first-child,
+.img-grid .img-real:first-child { grid-row:1/3; }
+
+/* ─── ZONE CARDS ─── */
+.zone-row { display:flex; gap:3px; width:100%; margin-top:32px; }
+.zone-card { flex:1; padding:32px 28px; background:var(--bg); display:flex; flex-direction:column; }
+.zone-name { font-weight:700; font-size:17px; color:var(--ink); margin-bottom:16px; }
+.zone-cap { font-family:'Oswald',sans-serif; font-weight:700; font-size:64px; color:var(--gold); line-height:1; }
+.zone-cap-u { font-weight:300; font-size:9px; color:var(--ink3); letter-spacing:.25em; margin-top:4px; margin-bottom:16px; }
+.zone-desc { font-weight:300; font-size:14px; color:var(--ink2); line-height:1.9; }
+
+/* ─── MODE ─── */
+.mode-wrap {
+  display:grid; grid-template-columns:1fr 1px 1fr;
+  width:100%; max-width:900px; margin-top:40px;
+}
+.mode-sep { background:rgba(26,23,20,.12); }
+.mode-col { padding:0 56px; }
+.mode-col:first-child { padding-left:0; }
+.mode-time { font-family:'Oswald',sans-serif; font-weight:700; font-size:52px; color:var(--gold); line-height:1; margin-bottom:8px; }
+.mode-name { font-weight:700; font-size:20px; color:var(--ink); margin-bottom:24px; }
+.num-hero { font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(64px,9vw,110px); color:var(--gold); line-height:.9; letter-spacing:-.02em; }
+.num-label { font-weight:300; font-size:11px; color:var(--ink3); letter-spacing:.22em; margin-top:8px; }
+
+/* ─── STATS ─── */
+.stats-row { display:flex; gap:0; margin:32px 0; }
+.stat-block { flex:1; padding:28px 32px; border-left:1px solid rgba(26,23,20,.1); }
+.stat-block:first-child { border-left:none; padding-left:0; }
+
+/* ─── TABLE ─── */
+.tbl { width:100%; border-collapse:collapse; max-width:720px; }
+.tbl thead tr { background:var(--ink); }
+.tbl th { font-weight:400; font-size:11px; letter-spacing:.28em; color:var(--white); text-align:center; padding:14px 20px; text-transform:uppercase; }
+.tbl th:first-child { text-align:left; }
+.tbl td { font-weight:300; font-size:14px; color:var(--ink2); padding:14px 20px; border-bottom:1px solid rgba(26,23,20,.08); line-height:1.5; text-align:center; }
+.tbl td:first-child { color:var(--ink); font-weight:700; text-align:left; }
+.tbl tr:last-child td { border-bottom:none; }
+
+/* ─── TIMELINE ─── */
+.tl { display:flex; width:100%; max-width:880px; margin:56px auto 0; }
+.tl-item { flex:1; padding-top:24px; position:relative; text-align:center; }
+.tl-item::before { content:''; position:absolute; top:6px; left:0; right:0; height:1px; background:var(--gold-b); }
+.tl-item:first-child::before { left:50%; }
+.tl-item:last-child::before { right:50%; }
+.tl-dot { position:absolute; top:2px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:var(--gold); }
+.tl-yr { font-family:'Oswald',sans-serif; font-size:22px; font-weight:600; color:var(--gold); margin-bottom:12px; }
+.tl-txt { font-size:13px; font-weight:300; color:var(--ink2); line-height:1.9; }
+
+/* ─── TEAM ─── */
+.team-row { display:flex; gap:3px; max-width:780px; margin:32px 0; }
+.team-card { flex:1; padding:40px; background:var(--bg); }
+.team-name { font-weight:700; font-size:28px; margin-bottom:6px; color:var(--ink); }
+.team-role { font-weight:300; font-size:10px; color:var(--gold); letter-spacing:.32em; margin-bottom:20px; }
+
+/* ─── DIVIDER ─── */
+.divider { height:1px; background:rgba(26,23,20,.08); margin:0 80px; }
+
+/* ─── FOOTER ─── */
+footer {
+  padding:40px 80px;
+  text-align:center;
+  background:var(--ink);
+  color:rgba(250,247,242,.35);
+  font-size:10px; letter-spacing:.25em; text-transform:uppercase;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .split { flex-direction:column; }
+  .split-photo { width:100%; height:260px; }
+  .split-reverse .split-photo { order:0; }
+  .split-reverse .split-body { order:0; }
+  .zone-row { flex-direction:column; }
+  .stats-row { flex-direction:column; }
+  .stat-block { border-left:none; border-top:1px solid rgba(26,23,20,.1); padding-left:0; padding:20px 0; }
+  .stat-block:first-child { border-top:none; }
+  .mode-wrap { grid-template-columns:1fr; }
+  .mode-sep { display:none; }
+  .mode-col { padding:0; margin-bottom:40px; }
+  .team-row { flex-direction:column; }
+  .sec-pad, .sec-pad-dark, .sec-pad-white { padding:60px 24px; }
+  .split-body { padding:48px 24px; }
+  .cover-text { padding:40px 24px; }
+  .img-grid { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
+  .img-grid .img-ph:first-child { grid-row:auto; }
+  #top-nav { padding:0 20px; }
+  .nav-links { display:none; }
+  footer { padding:28px 20px; }
+  .divider { margin:0 24px; }
+  .tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .tbl { min-width:480px; }
+  .num-hero { font-size:clamp(48px,12vw,80px); }
+  .zone-cap { font-size:52px; }
+  .h1 { font-size:clamp(28px,6vw,48px); }
+  .tl { flex-direction:column; gap:32px; margin-top:32px; }
+  .tl-item { padding-top:0; padding-left:28px; text-align:left; }
+  .tl-item::before { top:6px; left:0; right:auto; width:1px; height:100%; background:var(--gold-b); }
+  .tl-item:first-child::before { left:0; }
+  .tl-item:last-child::before { right:auto; }
+  .tl-dot { left:0; top:4px; transform:none; }
+  .cover-h { font-size:clamp(56px,14vw,110px); }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav id="top-nav">
+  <span class="nav-brand">HARERUYA</span>
+  <div class="nav-links">
+    <a href="#why">Why Us</a>
+    <a href="#concept">Concept</a>
+    <a href="#space">Space</a>
+    <a href="#model">Model</a>
+    <a href="#financials">Financials</a>
+    <a href="#team">Team</a>
+  </div>
+  <span class="conf-badge">Confidential</span>
+</nav>
+
+<!-- ══ S01 COVER ══ -->
+<section class="cover" id="top">
+  <div class="cover-photo">
+    <img src="images/bar_counter.jpg" alt="bar counter"
+         onerror="this.style.display='none'">
+  </div>
+  <div class="cover-overlay"></div>
+  <div class="cover-text">
+    <p class="cover-eyebrow">Investor Presentation — HARERUYA LLC 2026</p>
+    <p class="cover-h">活気と<br>洗練</p>
+    <p class="cover-sub">日本前の熱気と、今夜の一杯。</p>
+    <div class="cover-rule"></div>
+    <p class="cover-body">記憶に残る1杯には、思想がある。物語がある。<br>東京・中目黒 新規店舗プロジェクト</p>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ══ S02 WHY ══ -->
+<section class="sec-pad" id="why">
+  <p class="label">Why Us</p>
+  <h2 class="h1">なぜ今、なぜ私たちか。</h2>
+  <ul class="list">
+    <li>東京に<strong>「居酒屋でもバーでもない第三の業態」</strong>の空白がある</li>
+    <li>ARATA——和×ミクソロジー×ガストロノミーを体現する<strong>唯一無二のバーテンダー</strong></li>
+    <li>そのカクテルを<strong>居酒屋価格で飲める場所</strong>は、世界にまだ存在しない</li>
+    <li>HARERUYA LLC として法人化完了。<strong>経営とクリエイティブの両輪</strong>が揃った</li>
+    <li>中目黒の優良物件が動いている今が<strong>参入の最適タイミング</strong></li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ S03 CONCEPT ══ -->
+<section class="sec-pad-dark" id="concept">
+  <p class="label" style="color:var(--gold);">Concept</p>
+  <p class="concept-quote">
+    フードとドリンクに宿る、<br>
+    活気と洗練——<br>
+    その両方を、今夜ここで。
+  </p>
+  <div style="width:40px;height:2px;background:var(--gold);margin-bottom:28px;"></div>
+  <p class="concept-word">活気 × 洗練</p>
+  <p class="concept-body">
+    ARATAの和ミクソロジーが「飲み屋文化」を昇華させる。<br>
+    1軒目から最後の一杯まで、場所を変えずに完結できる店。
+  </p>
+</section>
+
+<!-- ══ S04 TARGET ══ -->
+<section class="split" id="target">
+  <div class="split-photo">
+    <img src="images/interior.jpg" alt="interior"
+         onerror="this.style.display='none'">
+    <div style="position:absolute;top:28px;left:28px;">
+      <p style="font-size:10px;font-weight:400;letter-spacing:.35em;color:rgba(255,255,255,.7);text-transform:uppercase;">Store Concept</p>
+    </div>
+  </div>
+  <div class="split-body">
+    <p class="label">Target &amp; Location</p>
+    <h2 class="h2">ターゲットと立地</h2>
+    <div class="data-item"><p class="data-label">📍 Location</p><p class="data-value">中目黒——住宅街寄りの路地</p></div>
+    <div class="data-item"><p class="data-label">👤 Who</p><p class="data-value">経営者・クリエイター・食の求道者<br><span style="font-size:17px;font-weight:400;color:var(--ink2);">30〜45歳</span></p></div>
+    <div class="data-item"><p class="data-label">🏠 Capacity</p><p class="data-value">16席（立ち飲み）＋ バー個室</p></div>
+    <div class="data-item"><p class="data-label">¥ Price Range</p><p class="data-value">¥8,000〜</p></div>
+    <div class="data-item"><p class="data-label">🏷️ Membership</p><p class="data-value">紹介制・会員コミュニティ</p></div>
+  </div>
+</section>
+
+<!-- ══ S05 VISUAL ══ -->
+<section class="sec-pad-white" id="space">
+  <p class="label">Space Concept</p>
+  <h2 class="h2">空間イメージ</h2>
+  <div class="img-grid">
+    <div style="grid-row:1/3;position:relative;overflow:hidden;">
+      <img src="images/full_room.jpg" style="width:100%;height:100%;object-fit:cover;display:block;"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="img-ph" style="width:100%;height:100%;position:absolute;inset:0;display:none;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>full_room.jpg</span>
+      </div>
+    </div>
+    <div class="img-ph"><span>立ち飲みゾーン</span></div>
+    <div class="img-ph"><span>バーカウンター</span></div>
+    <div class="img-ph"><span>カクテル</span></div>
+    <div class="img-ph"><span>個室</span></div>
+  </div>
+  <p class="body-sm" style="margin-top:12px;opacity:.6;">※ 画像生成後に差し替え</p>
+</section>
+
+<!-- ══ S06 SPACE DESIGN ══ -->
+<section class="sec-pad">
+  <p class="label">Space Design</p>
+  <h2 class="h1">二つのゾーンが<br>同居する。</h2>
+  <div class="zone-row">
+    <div class="zone-card">
+      <p class="zone-name">立ち飲みゾーン</p>
+      <p class="zone-cap">16</p>
+      <p class="zone-cap-u">席 / STANDING BAR</p>
+      <p class="zone-desc">入口・最初の一杯。活気の起点。コンクリート土間。ARATAのプレミックスカクテルと肴を、フラットに楽しむ。</p>
+    </div>
+    <div class="zone-card" style="background:var(--ink);color:var(--white);">
+      <p class="zone-name" style="color:var(--white);">バー個室</p>
+      <p class="zone-cap" style="color:var(--gold);">EX</p>
+      <p class="zone-cap-u" style="color:rgba(250,247,242,.5);">EXCLUSIVE</p>
+      <p class="zone-desc" style="color:rgba(250,247,242,.7);">ARATAが立つ完全予約制の個室バー。会員・紹介のみ。一般開放しない最高位の体験空間。</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ S07 BUSINESS MODEL ══ -->
+<section class="sec-pad" id="model">
+  <p class="label">Business Model</p>
+  <h2 class="h1">22:00 を境に、<br>店が変わる。</h2>
+  <div class="mode-wrap">
+    <div class="mode-col">
+      <p class="mode-time">17—22</p>
+      <p class="mode-name">居酒屋タイム</p>
+      <ul class="list">
+        <li>フードと酒が主役。ARATAプレミックスカクテルをカジュアルに</li>
+        <li>立ち飲み16席・全開放。活気が最大値になる時間</li>
+        <li>1軒目でも、〆でも選ばれる</li>
+      </ul>
+      <p class="num-hero" style="margin-top:32px;">¥8,000<span style="font-size:28px;">〜</span></p>
+      <p class="num-label">客単価 TARGET</p>
+    </div>
+    <div class="mode-sep"></div>
+    <div class="mode-col">
+      <p class="mode-time">22—</p>
+      <p class="mode-name">BARタイム</p>
+      <ul class="list">
+        <li>バー個室（EXCLUSIVE）主役</li>
+        <li>ARATAのシーズナルカクテル・完全予約制</li>
+        <li>照明・BGMを手動で切り替える儀式</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S08 ARATA ══ -->
+<section class="split split-reverse" id="edge">
+  <div class="split-photo">
+    <img src="images/bar_counter.jpg" alt="ARATA"
+         onerror="this.style.display='none'">
+    <div style="position:absolute;top:28px;left:28px;">
+      <p style="font-size:10px;font-weight:400;letter-spacing:.35em;color:rgba(255,255,255,.7);text-transform:uppercase;">Competitive Edge</p>
+    </div>
+  </div>
+  <div class="split-body">
+    <p class="label">Competitive Edge</p>
+    <h2 class="h2">ARATAという、<br>唯一の差別化。</h2>
+    <ul class="list">
+      <li><strong>ガストロノミーバーのクオリティを居酒屋価格で。</strong>プレミックス化で品質安定と原価管理を両立</li>
+      <li><strong>和 × ミクソロジー × ガストロノミーの融合。</strong>国内飲食シーンに類例なし</li>
+      <li><strong>ARATAが毎営業日バーに立つ。</strong>「ARATAのカクテルを飲める唯一の場所」という希少性</li>
+      <li><strong>1軒目からラストまで場所を変えずに完結。</strong>専業業態にはない体験密度</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ S09 FINANCIALS ══ -->
+<section class="sec-pad-white" id="financials">
+  <p class="label">Financials</p>
+  <h2 class="h1">収支概算</h2>
+  <div class="stats-row">
+    <div class="stat-block">
+      <p class="num-hero">¥480<span style="font-size:36px;">万〜</span></p>
+      <p class="num-label">月商 概算（立ち飲みのみ）</p>
+    </div>
+    <div class="stat-block">
+      <p class="num-hero">55<span style="font-size:36px;">%</span></p>
+      <p class="num-label">FL比率 TARGET</p>
+    </div>
+    <div class="stat-block">
+      <p class="num-hero">16<span style="font-size:36px;">席</span></p>
+      <p class="num-label">立ち飲みゾーン</p>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <tbody>
+      <tr><td>居酒屋タイム</td><td style="text-align:left;">¥8,000〜 × 16席 × 1.5回転 × 25日</td></tr>
+      <tr><td>BARタイム（個室）</td><td style="text-align:left;color:var(--ink3);">物件確定後に試算</td></tr>
+      <tr><td>家賃（想定）</td><td style="text-align:left;">¥40〜50万 / 月</td></tr>
+      <tr><td>ARATAコスト</td><td style="text-align:left;">役員報酬として計上</td></tr>
+      <tr><td>詳細PL</td><td style="text-align:left;color:var(--ink3);">物件確定後に作成</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ══ S10 ROADMAP ══ -->
+<section class="sec-pad" style="text-align:center;" id="roadmap">
+  <p class="label label-center" style="justify-content:center;">Roadmap</p>
+  <h2 class="h1" style="text-align:center;">2027年、開業。</h2>
+  <div class="tl">
+    <div class="tl-item"><div class="tl-dot"></div><p class="tl-yr">2026 Q2</p><p class="tl-txt">物件探索<br>投資家調達<br>ブランディング</p></div>
+    <div class="tl-item"><div class="tl-dot"></div><p class="tl-yr">2026 Q3</p><p class="tl-txt">物件契約<br>内装設計<br>メニュー開発</p></div>
+    <div class="tl-item"><div class="tl-dot"></div><p class="tl-yr">2026 Q4</p><p class="tl-txt">内装工事<br>スタッフ採用<br>準備</p></div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--bg);border:2px solid var(--gold);width:11px;height:11px;top:1px;"></div>
+      <p class="tl-yr" style="color:var(--ink);">2027</p>
+      <p class="tl-txt" style="color:var(--gold);font-weight:700;">グランド<br>オープン</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ S11 INVESTMENT ══ -->
+<section class="sec-pad" id="investment">
+  <p class="label">Investment</p>
+  <h2 class="h1">調達概要</h2>
+
+  <p class="body" style="max-width:680px;margin:0 0 48px;">
+    資金調達は、従来の投資ではなく <strong style="color:var(--gold);">OWNER MEMBERSHIP の先行販売</strong> によって行います。<br>
+    仕組みはクラウドファンディングと同じ。枠を購入することで店の共同オーナーとなり、
+    売上の一部がデポジットとして永年還元されます。
+  </p>
+
+  <!-- OWN THE BAR タイトルブロック -->
+  <div style="border-left:3px solid var(--gold);padding-left:20px;margin-bottom:40px;">
+    <p class="label" style="margin-bottom:4px;">Membership Program</p>
+    <h3 style="font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:.04em;margin:0 0 8px;">OWN THE BAR</h3>
+    <p class="body" style="color:var(--ink2);margin:0;">
+      記憶に残る1杯には、思想がある。物語がある。<br>
+      OWN THE BAR は、その一杯を共に創ることで、あなたが店の文化そのものの一部となる体験です。
+    </p>
+  </div>
+
+  <!-- 枠数・上限 -->
+  <div style="display:flex;gap:32px;flex-wrap:wrap;margin-bottom:48px;">
+    <div style="background:rgba(176,126,40,.10);border:1px solid rgba(176,126,40,.3);border-radius:8px;padding:24px 32px;flex:1;min-width:200px;text-align:center;">
+      <p style="font-size:clamp(36px,6vw,60px);font-weight:800;color:var(--gold);margin:0;line-height:1;">20</p>
+      <p class="body" style="margin:6px 0 0;font-size:14px;color:var(--ink2);">限定枠（総数）</p>
+    </div>
+    <div style="background:rgba(176,126,40,.10);border:1px solid rgba(176,126,40,.3);border-radius:8px;padding:24px 32px;flex:1;min-width:200px;text-align:center;">
+      <p style="font-size:clamp(36px,6vw,60px);font-weight:800;color:var(--gold);margin:0;line-height:1;">3</p>
+      <p class="body" style="margin:6px 0 0;font-size:14px;color:var(--ink2);">1名あたり最大取得枠</p>
+    </div>
+    <div style="background:rgba(176,126,40,.10);border:1px solid rgba(176,126,40,.3);border-radius:8px;padding:24px 32px;flex:1;min-width:200px;text-align:center;">
+      <p style="font-size:clamp(36px,6vw,60px);font-weight:800;color:var(--gold);margin:0;line-height:1;">¥1M</p>
+      <p class="body" style="margin:6px 0 0;font-size:14px;color:var(--ink2);">1枠あたり</p>
+    </div>
+  </div>
+
+  <!-- プラン比較テーブル -->
+  <div style="overflow-x:auto;margin-bottom:48px;">
+    <table class="tbl" style="min-width:600px;">
+      <thead>
+        <tr>
+          <th style="text-align:left;width:36%;"></th>
+          <th style="text-align:center;">1枠<br><span style="font-weight:400;font-size:13px;color:rgba(250,247,242,.7);">¥1,000,000</span></th>
+          <th style="text-align:center;">2枠<br><span style="font-weight:400;font-size:13px;color:rgba(250,247,242,.7);">¥2,000,000</span></th>
+          <th style="text-align:center;background:rgba(176,126,40,.18);">3枠<br><span style="font-weight:400;font-size:13px;color:rgba(250,247,242,.7);">¥3,000,000</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:left;">デポジット</td>
+          <td style="text-align:center;">購入額と同額<br><span style="font-size:12px;color:var(--ink3);">永年 / グループ新店舗含む</span></td>
+          <td style="text-align:center;">購入額と同額<br><span style="font-size:12px;color:var(--ink3);">永年 / グループ新店舗含む</span></td>
+          <td style="text-align:center;background:rgba(176,126,40,.06);">購入額と同額<br><span style="font-size:12px;color:var(--ink3);">永年 / グループ新店舗含む</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">オーナー還元</td>
+          <td style="text-align:center;color:var(--gold);font-weight:700;">粗利の 10%<br><span style="font-size:12px;font-weight:400;color:var(--ink3);">デポジットに毎月還元</span></td>
+          <td style="text-align:center;color:var(--gold);font-weight:700;">粗利の 25%<br><span style="font-size:12px;font-weight:400;color:var(--ink3);">デポジットに毎月還元</span></td>
+          <td style="text-align:center;background:rgba(176,126,40,.06);color:var(--gold);font-weight:700;">粗利の 50%<br><span style="font-size:12px;font-weight:400;color:var(--ink3);">デポジットに毎月還元</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">ドリンク開発権</td>
+          <td style="text-align:center;">○</td>
+          <td style="text-align:center;">○</td>
+          <td style="text-align:center;background:rgba(176,126,40,.06);">○</td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">一般会員券発行</td>
+          <td style="text-align:center;">無料発行可<br><span style="font-size:12px;color:var(--ink3);">通常入会金1万</span></td>
+          <td style="text-align:center;">無料発行可<br><span style="font-size:12px;color:var(--ink3);">通常入会金1万</span></td>
+          <td style="text-align:center;background:rgba(176,126,40,.06);">無料発行可<br><span style="font-size:12px;color:var(--ink3);">通常入会金1万</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:left;">コミュニティ参加</td>
+          <td style="text-align:center;">○</td>
+          <td style="text-align:center;">○</td>
+          <td style="text-align:center;background:rgba(176,126,40,.06);">○</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 注釈 -->
+  <p style="font-size:12px;color:var(--ink3);line-height:1.8;margin-top:-24px;">
+    ※ デポジットは弊社グループ店舗での飲食利用にのみ使用可。現金返還不可。有効期限なし。<br>
+    ※ 店舗に掲載するドリンクメニューの開発権を持つことをオーナーと称する（店舗の所有権・経営権とは無関係）。<br>
+    ※ 調達目的：内装工事費・厨房バー設備・初期運転資金。主な使途：内装工事 坪30〜50万 × 約20坪 / 機器・設備 / 初期仕入れ。
+  </p>
+</section>
+
+<!-- ══ S12 TEAM ══ -->
+<section class="sec-pad-white" style="text-align:center;" id="team">
+  <p class="label label-center">Team</p>
+  <div class="team-row" style="margin-left:auto;margin-right:auto;">
+    <div class="team-card">
+      <p class="team-name">ARATA</p>
+      <p class="team-role">代表 / バーテンダー・クリエイター</p>
+      <p class="body" style="font-size:15px;">合同会社晴夜 代表社員。和×ミクソロジー×ガストロノミーを体現するバーテンダー。プレミックスカクテル開発・店舗クリエイティブ全般を担う。</p>
+    </div>
+    <div style="width:3px;background:var(--white);flex-shrink:0;"></div>
+    <div class="team-card">
+      <p class="team-name">MASA</p>
+      <p class="team-role">共同創業者 / プロデューサー</p>
+      <p class="body" style="font-size:15px;">ブランドプロデューサー。経営・戦略・資金調達を担当。AI組織を活用した次世代型経営体制を構築。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMPANY INFO ══ -->
+<section class="sec-pad" id="company" style="text-align:center;">
+  <p class="label label-center">Company</p>
+  <div style="display:inline-flex;gap:3px;flex-wrap:wrap;max-width:720px;width:100%;">
+    <div style="flex:1;min-width:180px;padding:28px 32px;background:var(--white);border:1px solid rgba(26,23,20,.08);">
+      <p style="font-size:9px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Company</p>
+      <p style="font-weight:700;font-size:15px;color:var(--ink);">合同会社晴夜</p>
+      <p style="font-size:11px;color:var(--ink3);margin-top:4px;letter-spacing:.06em;">HARERUYA LLC</p>
+    </div>
+    <div style="flex:1;min-width:180px;padding:28px 32px;background:var(--white);border:1px solid rgba(26,23,20,.08);">
+      <p style="font-size:9px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Representative</p>
+      <p style="font-weight:700;font-size:15px;color:var(--ink);">鈴木 新</p>
+      <p style="font-size:11px;color:var(--ink3);margin-top:4px;">代表社員</p>
+    </div>
+    <div style="flex:1;min-width:180px;padding:28px 32px;background:var(--white);border:1px solid rgba(26,23,20,.08);">
+      <p style="font-size:9px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Address</p>
+      <p style="font-weight:400;font-size:14px;color:var(--ink);line-height:1.7;">東京都世田谷区<br>代沢2-41-2</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  合同会社晴夜 HARERUYA LLC&nbsp;|&nbsp;代表：鈴木 新&nbsp;|&nbsp; CONFIDENTIAL — 無断転用・共有禁止
+</footer>
+
+<script>
+// Progress bar on scroll
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+});
+</script>
+</body>
+</html>
